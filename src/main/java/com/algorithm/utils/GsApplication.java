@@ -7,13 +7,13 @@ import java.util.*;
 public class GsApplication {
     List<Man> allman=null;
     List<Woman>  allwoman=null;
-    static String filePath="D:\\zuoye\\SM\\wmmatch.txt";//File address.
+//    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
     List<String> txtList=null;
     //Initialize the preference list
-    public void ReadFile(){
+    public void ReadFile(String str){
         //Obtain the male list and female list from the TXT file.
         txtList=new ArrayList<String>();
-        File file = new File(filePath);
+        File file = new File("D:\\web\\algorithm\\"+ str +".txt");
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "GBK"));//Construct a BufferedReader class to read the file
             String s = null;
@@ -153,8 +153,13 @@ public class GsApplication {
 
 
     public static void main(String[] args) {
+        //Enter the TXT file name and read the Settings in the file.
+        Scanner in = new Scanner(System.in);
+        System.out.println("Please enter the file you want to read.");
+        String str = in.nextLine();
+
         GsApplication gsApplication=new GsApplication();
-        gsApplication.ReadFile();
+        gsApplication.ReadFile(str);
         while (true){
             Man freeMan=gsApplication.findFreedomMan();
             if(freeMan!=null){
@@ -164,7 +169,7 @@ public class GsApplication {
                 break;
             }
         }
-        gsApplication.ReadFile();
+        gsApplication.ReadFile(str);
         CheckUtil.hasBlockMatch(gsApplication.allman);
         for(Man man:gsApplication.allman){
             System.out.println(man.getName()+"===========Marry=========="+man.getPartner().getName());

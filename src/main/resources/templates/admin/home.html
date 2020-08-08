@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <title>Stable matching and visualization.</title>
 </head>
 <body style="background-image: url(./images/GS.jpg); background-size: cover;">
+<div class="container">
+    <h3>Stable matching and visualization</h3>
+    <div class="row" style="height: 20vh;">
+        <div class="col-lg-2 col-sm-2">&nbsp;</div>
+        <div class="col-lg-8 col-sm-8" align="center">
+            <form class="form-inline">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control big-input" id="matchName" placeholder="search content">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-info" onclick="doSearch();">Search</button>
+            </form>
+        </div>
+        <div class="col-lg-2 col-sm-2">&nbsp;</div>
+    </div>
+    <div class="row" style="height: 50vh;">
+        <div class="col-lg-2 col-sm-2">&nbsp;</div>
+        <div class="col-lg-8 col-sm-8" align="center">
+            <p id="gsRow" class="rowItem"><a href="./gsHome">GS Match</a></p>
+            <p id="egsRow" class="rowItem"><a href="./egsHome">EGS Match</a></p>
+        </div>
+        <div class="col-lg-2 col-sm-2">&nbsp;</div>
+    </div>
+    <div class="row" style="height: 10vh;">
+        <div class="col-lg-2 col-sm-2">&nbsp;</div>
+        <div class="col-lg-8 col-sm-8" align="center">
+            <button type="button" class="btn btn-info" onclick="showMatchAlg();">Matching algorithm</button>
+            <button type="button" class="btn btn-info" onclick="showSuggest();">Suggest</button>
+            <button type="button" class="btn btn-info" onclick="showPlan();">Future plan</button>
+        </div>
+        <div class="col-lg-2 col-sm-2">&nbsp;</div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" id="matchModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Matching algorithm</h4>
+            </div>
+            <div class="modal-body">
+                <p>Matching algorithmMatching algorithmMatching algorithmMatching algorithmMatching algorithmMatching algorithmMatching algorithmMatching algorithmMatching algorithmMatching algorithmMatching algorithm</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" id="suggestModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Suggest</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <textarea id="suggestContent" class="form-control" rows="3" placeholder="Input you suggest">
 
+                    </textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" onclick="sendSuggest()">Send suggest</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" id="planModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Future plan</h4>
+            </div>
+            <div class="modal-body">
+                <p>Future planFuture planFuture planFuture planFuture plan</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 </html>

@@ -17,13 +17,13 @@ public class EgsApplication {
 //    Woman[] allwoman=new Woman[]{woman1,woman2,woman3,woman4};
     List<Man> allman=null;
     List<Woman>  allwoman=null;
-    static String filePath="D:\\zuoye\\SM\\wmmatch.txt";//File address.
+//    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
     List<String> txtList=null;
     //Initialize the preference list
-    public void ReadFile(){
+    public void ReadFile(String str){
         //Obtain the male list and female list from the TXT file.
         txtList=new ArrayList<String>();
-        File file = new File(filePath);
+        File file = new File("D:\\web\\algorithm\\"+ str +".txt");
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "GBK"));//Construct a BufferedReader class to read the file
             String s = null;
@@ -168,8 +168,14 @@ public class EgsApplication {
 
 
     public static void main(String[] args) {
+        ////Enter the TXT file name and read the Settings in the file.
+        Scanner in = new Scanner(System.in);
+        System.out.println("Please enter the file you want to read.");
+        String str = in.nextLine();
+
+
         EgsApplication egsApplication=new EgsApplication();
-        egsApplication.ReadFile();
+        egsApplication.ReadFile(str);
         while (true){
             //Find single men
             Man freeMan=egsApplication.findFreedomMan();
@@ -181,7 +187,7 @@ public class EgsApplication {
                 break;
             }
         }
-        egsApplication.ReadFile();
+        egsApplication.ReadFile(str);
         CheckUtil.hasBlockMatch(egsApplication.allman);
         for(Man man:egsApplication.allman){
             System.out.println(man.getName()+"===========Marry=========="+man.getPartner().getName());
