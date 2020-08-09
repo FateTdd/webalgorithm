@@ -94,5 +94,48 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/pagination.js}"></script>
+<script type="text/javascript" th:src="@{/js/base.js}"></script>
+<script type="text/javascript">
+    function doSearch(){
+        $(".rowItem").hide();
+        $("#"+$("#matchName").val()+"Row").show();
+    }
+    function openUserDetail(_userId) {
+        layer.open({
+            type: 2,
+            title: "edit information",
+            maxmin: true,
+            area: ['80%', '90%'],
+            content: "./user/openGrxx.do?userId=" + _userId,
+            end: function () {
+                location.reload();
+            }
+        });
+    }
+    function showPlan() {
+        $('#planModal').modal('toggle')
+    }
+
+    function showSuggest(){
+        $("#suggestContent").val("");
+        $('#suggestModal').modal('toggle')
+    }
+    function showMatchAlg(){
+        $('#matchModal').modal('toggle')
+    }
+    function sendSuggest(){
+        layer.load(0)
+        ajaxPost("./saveSuggest.do", {suggest: $("#suggestContent").val()}, function (ret) {
+            layer.closeAll("loading");
+            layer.msg("success");
+            $('#suggestModal').modal('toggle')
+        });
+    }
+</script>
 </body>
 </html>
