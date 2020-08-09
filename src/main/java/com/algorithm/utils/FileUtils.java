@@ -14,7 +14,7 @@ public class FileUtils {
 //    static int manNum;
 //    static int womanNum=6;
 //    static int womanNum;
-    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//TXT file address.D:\zuoye\SM
+//    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//TXT file address.D:\zuoye\SM
 
 //    public static int getManNum(int i){
 //            int manNum = i;
@@ -26,12 +26,13 @@ public class FileUtils {
 //        return womanNum;
 //    }
 
-    public static void createTxt(int n){
+    public static void createTxt(int n,String str){
         //Create a TXT file to save the input data and the generated preference list.
         int manNum = n;//The number of men and women.
         int womanNum = n;
+        File filePath = new File("D:\\web\\algorithm\\"+ str +".txt");
         try {
-            File writename = new File(filePath);// Create a relative path. if not, create a new output. txt file
+            File writename = new File(String.valueOf(filePath));// Create a relative path. if not, create a new output. txt file
             if(!writename.exists()){
                 writename.createNewFile(); // Create new file
             }
@@ -70,6 +71,13 @@ public class FileUtils {
         }
     }
     public static void main(String[] args) {
+        //Enter the TXT file name and read the Settings in the file.
+
+        Scanner in = new Scanner(System.in);
+        System.out.println("Please enter the file name that you want to create.");
+        String str = in.nextLine();
+
+
         Scanner scan = new Scanner(System.in);
         System.out.println("Please enter the number of people：");
         int n = 0;
@@ -96,6 +104,6 @@ public class FileUtils {
 
 //        getManNum(n);
 //        getWomanNuma(n);
-        createTxt(n);
+        createTxt(n,str);
     }
 }

@@ -22,4 +22,22 @@ public class AdminController {
 
         return "admin/home";
     }
+
+    /**
+     * gs homepage
+     * @return
+     */
+    @RequestMapping("/gsHome")
+    public String gsHome() {
+        return "admin/gs-home";
+    }
+
+    /**
+     * ges homepage
+     * @return
+     */
+    @RequestMapping("/egsHome")
+    public String egsHome() {
+        return "admin/egs-home";
+    }
 }
