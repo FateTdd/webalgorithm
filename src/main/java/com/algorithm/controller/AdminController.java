@@ -1,6 +1,7 @@
 package com.algorithm.controller;
 
 import com.algorithm.utils.MessageResult;
+import com.algorithm.utils.SendEmail;
 import com.algorithm.utils.Suggest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.GeneralSecurityException;
 
 @Controller
 @RequestMapping("/")
@@ -33,8 +35,8 @@ public class AdminController {
      */
     @RequestMapping("/saveSuggest.do")
     @ResponseBody
-    public MessageResult saveSuggest(String suggest) {
-        Suggest.saveSuggest(suggest);
+    public MessageResult saveSuggest(String suggest) throws GeneralSecurityException {
+        SendEmail.SentEmail(suggest);
         return MessageResult.buildSuccess(true);
     }
 

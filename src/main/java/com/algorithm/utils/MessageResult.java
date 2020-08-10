@@ -3,6 +3,7 @@ package com.algorithm.utils;
 import java.io.Serializable;
 
 public class MessageResult<T> implements Serializable {
+    //serialization
     private static final long serialVersionUID = 5586118057859274971L;
 
 
