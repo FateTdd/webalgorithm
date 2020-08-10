@@ -1,10 +1,13 @@
 package com.algorithm.controller;
 
+import com.algorithm.utils.MessageResult;
+import com.algorithm.utils.Suggest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +26,17 @@ public class AdminController {
         return "admin/home";
     }
 
+    /**
+     * Save suggestions to a txt file, the file name is timestamp
+     * @param suggest
+     * @return
+     */
+    @RequestMapping("/saveSuggest.do")
+    @ResponseBody
+    public MessageResult saveSuggest(String suggest) {
+        Suggest.saveSuggest(suggest);
+        return MessageResult.buildSuccess(true);
+    }
 
     /**
      * gs homepage
