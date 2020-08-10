@@ -36,7 +36,7 @@ public class AdminController {
     @RequestMapping("/saveSuggest.do")
     @ResponseBody
     public MessageResult saveSuggest(String suggest) throws GeneralSecurityException {
-        SendEmail.SentEmail(suggest);
+            SendEmail.SentEmail(suggest);
         return MessageResult.buildSuccess(true);
     }
 
