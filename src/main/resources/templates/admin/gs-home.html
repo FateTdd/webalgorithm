@@ -1,11 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <title>Stable matching and visualization.</title>
 </head>
 <body style="background-image: url(./images/GS.jpg); background-size: cover;">
+<div class="container">
+    <div class="row" style="height: 10vh;padding-top: 20px;">
+        <div class="col-lg-4 col-sm-4"><h3>GS Match</h3></div>
+        <div class="col-lg-4 col-sm-4"><h3 id="matchResult"></h3></div>
+        <div class="col-lg-4 col-sm-4" align="center">
+            <button type="button" class="btn btn-info btn-sm" onclick="location.href='./home'">Home</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="openHelp();">Help</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="openCreate();">Create</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="doMatch();">Match</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="saveFile();">File</button>
+        </div>
+        <div class="col-lg-4 col-sm-4">&nbsp;</div>
+    </div>
+    <div class="row" style="height: 90vh;">
+        <div class="col-lg-3 col-sm-3">
+            <div class="content-bg" style="padding-top: 100px;">
+                <ol class="code" id="play-code">
+                    <li>Initialize all men and women to free</li>
+                    <li>while there exist a free man m who still has a woman w to propose to </li>
+                    <li>{</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;w = m's highest ranked such woman to whom he has not yet proposed</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;if w is free</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m, w) become engaged</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp; else some pair (m', w) already exists</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if w prefers m to m'</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m, w) become engaged</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m' becomes free</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m', w) remain engaged</li>
+                    <li>}</li>
+                </ol>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-3">
+            <div class="content-bg">
+                <h4><span>Men:</span><span id="all-man"></span></h4>
+                <ul id="man-pre-list">
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-3 ">
+            <div class="content-bg">
+                <h4><span>Women:</span><span id="all-woman"></span></h4>
+                <ul id="woman-pre-list">
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-3">
+            <div class="content-bg" >
+                <ul id="msg-list">
+                </ul>
+            </div>
+        </div>
 
+        <!--<div class="col-lg-8 col-sm-8" align="center">-->
+        <!--<form class="form-inline">-->
+        <!--<div class="form-group">-->
+        <!--<div class="input-group">-->
+        <!--<input type="text" class="form-control big-input" id="exampleInputAmount" placeholder="search content">-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<button type="button" class="btn btn-info">Search</button>-->
+        <!--</form>-->
+        <!--</div>-->
+        <!--<div class="col-lg-2 col-sm-2">&nbsp;</div>-->
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" id="helpModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Help</h4>
+            </div>
+            <div class="modal-body">
+                <p> GS  HelpHelpHelpHelpHelpHelp</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" id="createModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left: 6px;padding-right: 6px;">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="manNumber" class="col-sm-4 control-label">Man Num:</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="manNumber" placeholder="Man Number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="womanNumber" class="col-sm-4 control-label">Woman Num:</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="womanNumber" placeholder="Woman Number">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" onclick="doCreate()">Create</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 </html>
