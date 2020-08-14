@@ -85,7 +85,7 @@ public class AdminController {
             mansb.append("man"+manList.get(i)+"="+ Joiner.on(",").join(womanList));
             mansb.append("-");
         }
-        Collections.sort(womanList);//重新排序
+        Collections.sort(womanList);//reorder
         for (int i =0;i<womanList.size();i++){
             Collections.shuffle(manList);
             womansb.append("woman"+womanList.get(i)+"="+Joiner.on(",").join(manList));

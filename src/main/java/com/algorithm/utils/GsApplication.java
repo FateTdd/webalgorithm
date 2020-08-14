@@ -10,6 +10,7 @@ public class GsApplication {
 //    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
     List<String> txtList=null;
     //Initialize the preference list
+
     public void ReadFile(String str){
         //Obtain the male list and female list from the TXT file.
         txtList=new ArrayList<String>();
@@ -153,26 +154,26 @@ public class GsApplication {
 
 
     public static void main(String[] args) {
-        //Enter the TXT file name and read the Settings in the file.
-        Scanner in = new Scanner(System.in);
-        System.out.println("Please enter the file you want to read.");
-        String str = in.nextLine();
-
-        GsApplication gsApplication=new GsApplication();
-        gsApplication.ReadFile(str);
-        while (true){
-            Man freeMan=gsApplication.findFreedomMan();
-            if(freeMan!=null){
-                gsApplication.searchPartner(freeMan,gsApplication.allwoman);
-            }else{
-                System.out.println("END=====================All the men have partners");
-                break;
-            }
-        }
-        gsApplication.ReadFile(str);
-        CheckUtil.hasBlockMatch(gsApplication.allman);
-        for(Man man:gsApplication.allman){
-            System.out.println(man.getName()+"===========Marry=========="+man.getPartner().getName());
-        }
+//        //Enter the TXT file name and read the Settings in the file.
+//        Scanner in = new Scanner(System.in);
+//        System.out.println("Please enter the file you want to read.");
+//        String str = in.nextLine();
+//
+//        GsApplication gsApplication=new GsApplication();
+//        gsApplication.ReadFile(str);
+//        while (true){
+//            Man freeMan=gsApplication.findFreedomMan();
+//            if(freeMan!=null){
+//                gsApplication.searchPartner(freeMan,gsApplication.allwoman);
+//            }else{
+//                System.out.println("END=====================All the men have partners");
+//                break;
+//            }
+//        }
+//        gsApplication.ReadFile(str);
+//        CheckUtil.hasBlockMatch(gsApplication.allman);
+//        for(Man man:gsApplication.allman){
+//            System.out.println(man.getName()+"===========Marry=========="+man.getPartner().getName());
+//        }
     }
 }
