@@ -5,10 +5,10 @@ import java.io.*;
 import java.util.*;
 
 public class GsApplication {
-    List<Man> allman=null;
-    List<Woman>  allwoman=null;
+    public List<Man> allman=null;
+    public List<Woman>  allwoman=null;
+    public List<String> txtList=new ArrayList<String>();
 //    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
-    List<String> txtList=null;
     //Initialize the preference list
     public GsApplication(String manStr,String womanStr){
         String[] manStrArr=manStr.split("-");
