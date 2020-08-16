@@ -230,6 +230,91 @@
         form.submit();
         form.remove();
     }
+    $(function () {
+        openSocket();
+    })
+    var socket;
+    function openSocket() {
+        if(typeof(WebSocket) == "undefined") {
+            alert("Your browser does not support WebSockets");
+        }else{
+            console.log("Your browser supports WebSocket");
+            var socketUrl="ws://localhost:8080/match/gsServer";
+            console.log(socketUrl);
+            if(socket!=null){
+                socket.close();
+                socket=null;
+            }
+            socket = new WebSocket(socketUrl);
+            //Open the event
+            socket.onopen = function() {
+                console.log("Websocket is open");
+            };
+            //Get message event
+            socket.onmessage = function(msg) {
+                console.log(msg.data);
+                var msgObj=JSON.parse(msg.data);
+                switch (msgObj.code) {
+                    case 2:
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[1]).css("background-color","#ddd");
+                        setTimeout(function () {
+                            sendMessage(JSON.stringify({code:3}));
+                        },1200);
+                        break;
+                    case 4://found single men
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[3]).css("background-color","#ddd");
+                        $("#msg-list").append("<li> find "+msgObj.freeMan+" is free</li>");
+                        break;
+                    case 7://Looking for a spouse for a single man
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[2]).css("background-color","#ddd");
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                        break;
+                    case 8://Successfully matched with free women
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        var manPreLis=$("#man-pre-list").find("li");
+                        $(manPreLis[eval(msgObj.man)-1]).find("span").text(" engaged with Woman"+msgObj.woman);
+                        var womanPreLis=$("#woman-pre-list").find("li");
+                        $(womanPreLis[eval(msgObj.woman)-1]).find("span").text(" engaged with Man"+msgObj.man);
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                        break;
+                    case 9://Successfully matched with unfree women
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        var manPreLis=$("#man-pre-list").find("li");
+                        $(manPreLis[eval(msgObj.man)-1]).find("span").text(" engaged with Woman"+msgObj.woman);
+                        var womanPreLis=$("#woman-pre-list").find("li");
+                        $(womanPreLis[eval(msgObj.woman)-1]).find("span").text(" engaged with Man"+msgObj.man);
+                        $(manPreLis[eval(msgObj.oldman)-1]).find("span").text("");
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                        break;
+                    case 99://Successfully matched with unfree women
+                        filePath=msgObj.filePath;
+                        $("#matchResult").text("GS match end");
+                        layer.msg('match success end', {
+                            icon: 1,
+                            time: 2000
+                        }, function () {
+
+                        });
+                        break;
+                }
+            };
+            //Close the event
+            socket.onclose = function() {
+                console.log("Websocket closed");
+            };
+            //An error event has occurred
+            socket.onerror = function() {
+                console.log("There is an error with webSocket");
+            }
+        }
+    }
 </script>
 </body>
 </html>
