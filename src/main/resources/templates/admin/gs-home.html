@@ -12,108 +12,187 @@
     <!--<link href="../../static/css/materialdesignicons.min.css" rel="stylesheet">-->
     <!--<link href="../../static/css/style.min.css" rel="stylesheet">-->
     <style type="text/css">
-        .container{
+        .container {
             width: 99%;
         }
-        h3{
-            color:white;
+
+        h3 {
+            color: white;
             text-align: center;
         }
-        h4{
-            color:black;
+
+        h4 {
+            color: black;
             text-align: center;
         }
-        .col-*{
+
+        .col- * {
             padding: 10px 2px;
         }
-        .content-bg{
-            height: 70vh;
-            background-color:#fff;
+
+        .content-bg {
+            height: 90vh;
+            background-color: #fff;
             padding: 10px 2px;
             border-radius: 5px;
             overflow: auto;
+            overflow-x: hidden;
         }
-        .code li{
-            font-size:20px;
-            line-height: 28px;
+
+        .code li {
+            font-size: 14px;
+            line-height: 18px;
         }
-        li p{
+
+        li p {
+            width: 92%;
+            word-wrap: break-word;
+        }
+
+        .msg {
             width: 96%;
-            word-wrap:break-word;
-        }
-        .msg{
-            width: 96%;
-            word-wrap:break-word;
+            word-wrap: break-word;
             font-size: 22px;
             line-height: 32px;
         }
-        #man-pre-list li{
-            font-size: 20px;
-            line-height: 26px;
-        }
-        #woman-pre-list li{
-            font-size: 20px;
-            line-height: 26px;
-        }
-        #msg-list li{
+
+        #man-pre-list li {
             font-size: 18px;
             line-height: 22px;
         }
-        .result{
+
+        #woman-pre-list li {
+            font-size: 18px;
+            line-height: 22px;
+        }
+
+        #msg-list li {
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        .result {
             color: #65bdf8;
         }
+        #free-men li{
+            display: inline-block;
+            width: 50%;
+            font-size: 10px;
+            font-weight: bolder;
+            color: #242dbd;
+        }
+        #free-women li{
+            display: inline-block;
+            width: 50%;
+            font-size: 10px;
+            font-weight: bolder;
+            color:#242dbd;
+        }
+        #match-list li{
+            display: inline-block;
+            width: 50%;
+            font-size: 12px;
+            font-weight: bolder;
+            color:#0cbd09;
+        }
+        #match-list{
+            height: 18vh;
+            overflow: auto;
+        }
+        #free-men{
+            height: 16vh;
+            overflow: auto;
+        }
+        #free-women{
+            height: 16vh;
+            overflow: auto;
+        }
+        .sk{
+            display: inline-block;
+        }
+
     </style>
 </head>
+
 <body style="background-image: url(./images/GS.jpg); background-size: cover;">
 <div class="container">
-    <div class="row" style="height: 10vh;padding-top: 20px;">
-        <div class="col-lg-4 col-sm-4"><h3>GS Match</h3></div>
-        <div class="col-lg-4 col-sm-4"><h3 id="matchResult"></h3></div>
-        <div class="col-lg-4 col-sm-4" align="center">
-            <button type="button" class="btn btn-info btn-sm" onclick="location.href='./home'">Home</button>
-            <button type="button" class="btn btn-info btn-sm" onclick="openHelp();">Help</button>
-            <button type="button" class="btn btn-info btn-sm" onclick="openCreate();">Create</button>
-            <button type="button" class="btn btn-info btn-sm" onclick="doMatch();">Match</button>
-            <button type="button" class="btn btn-info btn-sm" onclick="saveFile();">File</button>
+    <div class="row" style="height: 9vh;padding-top: 10px;">
+        <div class="col-lg-4 col-sm-4"><h3 style="text-align: center;color: white;">GS Match</h3></div>
+        <div class="col-lg-3 col-sm-3"><h3 id="matchResult"></h3></div>
+        <div class="col-lg-5 col-sm-5" align="center">
+            <button type="button" class="btn btn-info btn-sm" onclick="location.href='./home'"> <i class="mdi mdi-home"></i>Home</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="openHelp();"><i class="mdi mdi-help"></i>Help</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="openCreate();"><i class="mdi mdi-account-multiple-plus"></i>Create</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="doMatch();"><i class="mdi mdi-play"></i>Match</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="saveFile();"><i class="mdi mdi-content-save"></i>File</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="saveLog();"><i class="mdi mdi-content-save"></i>Save Log</button>
         </div>
         <div class="col-lg-4 col-sm-4">&nbsp;</div>
     </div>
-    <div class="row" style="height: 90vh;">
-        <div class="col-lg-3 col-sm-3">
-            <div class="content-bg" style="padding-top: 100px;">
-                <ol class="code" id="play-code">
-                    <li>Initialize all men and women to free</li>
-                    <li>while there exist a free man m who still has a woman w to propose to </li>
-                    <li>{</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;w = m's highest ranked such woman to whom he has not yet proposed</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;if w is free</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m, w) become engaged</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp; else some pair (m', w) already exists</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if w prefers m to m'</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m, w) become engaged</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m' becomes free</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else</li>
-                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m', w) remain engaged</li>
-                    <li>}</li>
-                </ol>
+    <div class="row" style="height: 91vh;">
+        <div class="col-lg-4 col-sm-4">
+            <div class="content-bg" style="padding-top: 10px;">
+                <div class="row">
+                    <h5 style=" text-align: center;color:#242dbd;font-weight: bolder;">GS Code Flow</h5>
+                    <ol class="code" id="play-code" style="margin-left: 0px;">
+                        <li>Initialize all men and women to free</li>
+                        <li>while there exist a free man m who still has a woman w to propose to</li>
+                        <li>{</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;w = m's highest ranked such woman to whom he has not yet proposed
+                        </li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;if w is free</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m, w) become engaged</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp; else some pair (m', w) already exists</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if w prefers m to m'</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m, w) become engaged</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m' becomes free</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(m', w) remain engaged</li>
+                        <li>}</li>
+                    </ol>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6" >
+                        <h5 style="color:#242dbd;font-weight: bolder;text-align: center;">Free Men</h5>
+                        <ul id="free-men">
+
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 col-sm-6" >
+                        <h5 style="color:#242dbd;font-weight: bolder;text-align: center;">Free Women</h5>
+                        <ul  id="free-women">
+
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <h5 style="color:#0cbd09;font-weight: bolder;text-align: center;">Engaged Match</h5>
+                        <ul  id="match-list">
+
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3">
-            <div class="content-bg">
-                <h4><span>Men:</span><span id="all-man"></span></h4>
+            <div class="content-bg" >
+                <h5 style="color:#242dbd;font-weight: bolder;text-align: center;"><span>Men:</span><span id="all-man"></span></h5>
                 <ul id="man-pre-list">
                 </ul>
             </div>
         </div>
         <div class="col-lg-3 col-sm-3 ">
             <div class="content-bg">
-                <h4><span>Women:</span><span id="all-woman"></span></h4>
+                <h5 style="color:#242dbd;font-weight: bolder;text-align: center;"><span>Women:</span><span id="all-woman"></span></h5>
                 <ul id="woman-pre-list">
                 </ul>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-3">
-            <div class="content-bg" >
+        <div class="col-lg-2 col-sm-2">
+            <div class="content-bg">
+                <h5 style="color:#242dbd;font-weight: bolder;text-align: center;">GS Match Logs</h5>
                 <ul id="msg-list">
                 </ul>
             </div>
@@ -136,11 +215,12 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title">Help</h4>
             </div>
             <div class="modal-body">
-                <p> GS  HelpHelpHelpHelpHelpHelp</p>
+                <p> GS HelpHelpHelpHelpHelpHelp</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -152,7 +232,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title">Create</h4>
             </div>
             <div class="modal-body">
@@ -170,6 +251,14 @@
                                 <input type="number" class="form-control" id="womanNumber" placeholder="Woman Number">
                             </div>
                         </div>
+                        <div class="form-group" align="center">
+                            <label class="radio-inline">
+                                <input type="radio" name="createWay" checked="true" value="0"> Auto
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="createWay" value="1"> Input
+                            </label>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -180,6 +269,40 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" id="inputModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Create Input Prefer List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left: 6px;padding-right: 6px;">
+                    <div class="col-sm-6">
+                        <form class="form-horizontal">
+                            <div class="form-group" id="man-preInput-list">
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <form class="form-horizontal">
+                            <div class="form-group" id="woman-preInput-list">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" onclick="doInputCreate()">Create</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
@@ -187,22 +310,68 @@
 <script type="text/javascript" th:src="@{/js/pagination.js}"></script>
 <script type="text/javascript" th:src="@{/js/base.js}"></script>
 <script type="text/javascript">
-    var manStr=null;
-    var womanStr=null;
-    var filePath=null;
-    var playCodeLis=[];
-    //Start algorithm matching
-    function doMatch(){
+    var manStr = null;
+    var womanStr = null;
+    var filePath = null;
+    var playCodeLis = [];
+
+    // Start algorithm matching
+    function doMatch() {
+        if(isCreate==false){
+            layer.msg('please create', {
+                icon: 5,
+                time: 2000 //2 seconds off (default is 3 seconds if not configured)
+            }, function () {
+
+            });
+            return;
+        }
+        isCreate=false;
         // layer.msg("")
         $("#matchResult").text("GS match start");
-        playCodeLis=$("#play-code").find("li");
-        $(playCodeLis[0]).css("background-color","#ddd");
+        playCodeLis = $("#play-code").find("li");
+        $(playCodeLis[0]).css("background-color", "#ddd");
+        $("#msg-list").html("");
         setTimeout(function () {
-            sendMessage(JSON.stringify({code:1,manStr:manStr,womanStr:womanStr}));
-        },1200);
+            sendMessage(JSON.stringify({code: 1, manStr: manStr, womanStr: womanStr}));
+        }, 1200);
     }
-    function saveFile(){
-        if(filePath==null){
+
+    //Save the log
+    function saveLog() {
+        var msgArr = $("#msg-list").find("li");
+        var msgStr = "";
+        for (var i=0;i<msgArr.length;i++) {
+            msgStr += $(msgArr[i]).text() + "###";
+            console.log(i);
+        }
+        layer.load(0);
+        ajaxPost("./saveLog", {msgStr: msgStr}, function (ret) {
+            // alert(ret.data);
+            var form = $("<form>");
+            form.attr("style", "display:none");
+            form.attr("target", "");
+            form.attr("method", "post");
+            form.attr("action", "./download.do");
+            var input1 = $("<input>");
+            input1.attr("type", "hidden");
+            input1.attr("name", "fileName");
+            input1.attr("value", "GsMatchLogFile.txt");
+            var input2 = $("<input>");
+            input2.attr("type", "hidden");
+            input2.attr("name", "savePath");
+            input2.attr("value", decodeURIComponent(ret.data));
+            $("body").append(form);
+            form.append(input1);
+            form.append(input2);
+            form.submit();
+            form.remove();
+            layer.closeAll("loading");
+        });
+    }
+
+    function saveFile() {
+        if (filePath == null) {
             layer.msg('file is empty', {
                 icon: 1,
                 time: 2000 //2 seconds off (default is 3 seconds if not configured)
@@ -212,89 +381,126 @@
             return;
         }
         var form = $("<form>");
-        form.attr("style","display:none");
-        form.attr("target","");
-        form.attr("method","post");
-        form.attr("action","./download.do");
+        form.attr("style", "display:none");
+        form.attr("target", "");
+        form.attr("method", "post");
+        form.attr("action", "./download.do");
         var input1 = $("<input>");
-        input1.attr("type","hidden");
-        input1.attr("name","fileName");
-        input1.attr("value","GsMatchFile.txt");
+        input1.attr("type", "hidden");
+        input1.attr("name", "fileName");
+        input1.attr("value", "GsMatchFile.txt");
         var input2 = $("<input>");
-        input2.attr("type","hidden");
-        input2.attr("name","savePath");
-        input2.attr("value",decodeURIComponent(filePath));
+        input2.attr("type", "hidden");
+        input2.attr("name", "savePath");
+        input2.attr("value", decodeURIComponent(filePath));
         $("body").append(form);
         form.append(input1);
         form.append(input2);
         form.submit();
         form.remove();
     }
+
     $(function () {
         openSocket();
     })
     var socket;
+
     function openSocket() {
-        if(typeof(WebSocket) == "undefined") {
+        if (typeof(WebSocket) == "undefined") {
             alert("Your browser does not support WebSockets");
-        }else{
+        } else {
             console.log("Your browser supports WebSocket");
-            var socketUrl="ws://localhost:8080/match/gsServer";
+            var socketUrl = "ws://localhost:8080/match/gsServer";
             console.log(socketUrl);
-            if(socket!=null){
+            if (socket != null) {
                 socket.close();
-                socket=null;
+                socket = null;
             }
             socket = new WebSocket(socketUrl);
             //Open the event
-            socket.onopen = function() {
+            socket.onopen = function () {
                 console.log("Websocket is open");
+
             };
             //Get message event
-            socket.onmessage = function(msg) {
+            socket.onmessage = function (msg) {
                 console.log(msg.data);
-                var msgObj=JSON.parse(msg.data);
+                var msgObj = JSON.parse(msg.data);
                 switch (msgObj.code) {
                     case 2:
-                        $("#play-code").find("li").css("background-color","#fff");
-                        $(playCodeLis[1]).css("background-color","#ddd");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[1]).css("background-color", "#ddd");
                         setTimeout(function () {
-                            sendMessage(JSON.stringify({code:3}));
-                        },1200);
+                            sendMessage(JSON.stringify({code: 3}));
+                        }, 1200);
                         break;
                     case 4://found single men
-                        $("#play-code").find("li").css("background-color","#fff");
-                        $(playCodeLis[3]).css("background-color","#ddd");
-                        $("#msg-list").append("<li> find "+msgObj.freeMan+" is free</li>");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[3]).css("background-color", "#ddd");
+                        $("#msg-list").append("<li> find " + msgObj.freeMan + " is free</li>");
                         break;
                     case 7://Looking for a spouse for a single man
-                        $("#play-code").find("li").css("background-color","#fff");
-                        $(playCodeLis[2]).css("background-color","#ddd");
-                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
-                        $("#play-code").find("li").css("background-color","#fff");
-                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[2]).css("background-color", "#ddd");
+                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        if(msgObj.colorMan){
+                            var skArr=$("span");
+                            for(var i=0;i<skArr.length;i++){
+                                console.log($(skArr[i]).css("color"));
+                                if($(skArr[i]).css("color")=="#F8EE22"||$(skArr[i]).css("color")=="rgb(248, 238, 34)"){
+                                    $(skArr[i]).css("color","#6886F8")
+                                }
+                            }
+                            $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F8EE22");
+                            $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F8EE22");
+                            $("#tarMan"+msgObj.colorMan).css("color","#F8EE22");
+                            $("#tarWoman"+msgObj.colorWoman).css("color","#F8EE22");
+                        }
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
                         break;
-                    case 8://Successfully matched with free women
-                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
-                        var manPreLis=$("#man-pre-list").find("li");
-                        $(manPreLis[eval(msgObj.man)-1]).find("span").text(" engaged with Woman"+msgObj.woman);
-                        var womanPreLis=$("#woman-pre-list").find("li");
-                        $(womanPreLis[eval(msgObj.woman)-1]).find("span").text(" engaged with Man"+msgObj.man);
-                        $("#play-code").find("li").css("background-color","#fff");
-                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                    case 8://Men and free women match well
+                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
+                        // var manPreLis = $("#man-pre-list").find("li");
+                        // $(manPreLis[eval(msgObj.man) - 1]).find("span").text(" engaged with Woman" + msgObj.woman);
+                        // var womanPreLis = $("#woman-pre-list").find("li");
+                        // $(womanPreLis[eval(msgObj.woman) - 1]).find("span").text(" engaged with Man" + msgObj.man);
+                        $("#match-list").append("<li id='matchMan"+msgObj.man+"Woman"+ msgObj.woman+"'>Man" +msgObj.man+" match Woman"+ msgObj.woman + "</li>");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
+                        $("#freeMan"+msgObj.man).remove();
+                        $("#freeWoman"+msgObj.woman).remove();
+                        if(msgObj.colorMan){
+                            $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F85576");
+                            $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F85576");
+                            $("#tarMan"+msgObj.colorMan).css("color","#6886F8");
+                            $("#tarWoman"+msgObj.colorWoman).css("color","#6886F8");
+                        }
                         break;
-                    case 9://Successfully matched with unfree women
-                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
-                        var manPreLis=$("#man-pre-list").find("li");
-                        $(manPreLis[eval(msgObj.man)-1]).find("span").text(" engaged with Woman"+msgObj.woman);
-                        var womanPreLis=$("#woman-pre-list").find("li");
-                        $(womanPreLis[eval(msgObj.woman)-1]).find("span").text(" engaged with Man"+msgObj.man);
-                        $(manPreLis[eval(msgObj.oldman)-1]).find("span").text("");
-                        $("#play-code").find("li").css("background-color","#fff");
-                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                    case 9://Men and unfree women are successful matches
+                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
+                        // var manPreLis = $("#man-pre-list").find("li");
+                        // $(manPreLis[eval(msgObj.man) - 1]).find("span").text(" engaged with Woman" + msgObj.woman);
+                        // var womanPreLis = $("#woman-pre-list").find("li");
+                        // $(womanPreLis[eval(msgObj.woman) - 1]).find("span").text(" engaged with Man" + msgObj.man);
+                        $("#match-list").append("<li id='matchMan"+msgObj.man+"Woman"+ msgObj.woman+"'>Man" +msgObj.man+" match Woman"+ msgObj.woman + "</li>");
+                        $("#matchMan"+msgObj.oldman+"Woman"+ msgObj.woman).remove();
+                        $("#tarMan"+msgObj.oldman+"PreWoman"+msgObj.colorWoman).css("color","#6886F8");
+                        $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.oldman).css("color","#6886F8");
+                        $("#free-men").append("<li id='freeMan"+msgObj.oldman+"'>Man"+msgObj.oldman+"</li>");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
+                        $("#freeMan"+msgObj.man).remove();
+                        $("#freeWoman"+msgObj.woman).remove();
+                        if(msgObj.colorMan){
+                            $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F85576");
+                            $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F85576");
+                            $("#tarMan"+msgObj.colorMan).css("color","#6886F8");
+                            $("#tarWoman"+msgObj.colorWoman).css("color","#6886F8");
+                        }
                         break;
-                    case 99://Successfully matched with unfree women
-                        filePath=msgObj.filePath;
+                    case 99://End of the match
+                        filePath = msgObj.filePath;
                         $("#matchResult").text("GS match end");
                         layer.msg('match success end', {
                             icon: 1,
@@ -306,62 +512,169 @@
                 }
             };
             //Close the event
-            socket.onclose = function() {
+            socket.onclose = function () {
                 console.log("Websocket closed");
             };
             //An error event has occurred
-            socket.onerror = function() {
+            socket.onerror = function () {
                 console.log("There is an error with webSocket");
             }
         }
     }
+
     function sendMessage(_msg) {
-        if(typeof(WebSocket) == "undefined") {
+        if (typeof(WebSocket) == "undefined") {
             alert("Your browser does not support WebSockets");
-        }else {
+        } else {
             socket.send(_msg);
         }
     }
+
     //Open the create
-    function openCreate(){
+    function openCreate() {
         $('#createModal').modal('toggle')
     }
+
     //Open the help
     function openHelp() {
         $('#helpModal').modal('toggle')
     }
-    function doCreate(){
-        var manNumber=$("#manNumber").val();
-        var womanNumber=$("#womanNumber").val();
-        ajaxPost("./doCreate", {manNum: manNumber,womanNum:womanNumber}, function (ret) {
-            manStr=ret.data.man;
-            var manArr=manStr.split("-");
-            var manliStrs="";
-            for(var i in manArr){
-                if(i==0){
-                    $("#all-man").html(manArr[0]);
-                }else{
-                    if($.trim(manArr[i])!=""){
-                        manliStrs+="<li><p>"+manArr[i]+"<span class='result'></span></p></li>";
-                    }
-                }
-            }
-            $("#man-pre-list").html(manliStrs);
-            womanStr=ret.data.woman;
-            var womanArr=womanStr.split("-");
-            var womanliStrs="";
-            for(var i in womanArr){
-                if(i==0){
-                    $("#all-woman").html(womanArr[0]);
-                }else{
-                    if($.trim(womanArr[i])!=""){
-                        womanliStrs+="<li><p>"+womanArr[i]+"<span class='result'></span></p></li>";
-                    }
-                }
-            }
-            $("#woman-pre-list").html(womanliStrs);
+
+    function doCreate() {
+        var createWay=$("input[name='createWay']:checked").val();
+        if(createWay==0){
+            //auto
+            autoCreate();
+        }else{
+            //input
+            $('#createModal').modal('toggle')
+            inputCreate();
+        }
+    }
+
+    function doInputCreate(){
+        var manNumber = $("#manNumber").val();
+        var womanNumber = $("#womanNumber").val();
+        var tempManstr="manNum="+manNumber+"-";
+        var tempWomanStr="womanNum="+womanNumber+"-";
+        for(var i=1;i<=manNumber;i++){
+            tempManstr+="man"+i+"="+$("#manInput"+i).val()+"-";
+        }
+        for(var i=1;i<=womanNumber;i++){
+            tempWomanStr+="woman"+i+"="+$("#womanInput"+i).val()+"-";
+        }
+        manStr =tempManstr;
+        womanStr =tempWomanStr;
+        formatManStr();
+        formatWomanStr();
+        $('#inputModal').modal('toggle')
+    }
+    var isCreate=false;
+    //Manually create a preference list
+    function inputCreate(){
+        var manNumber = $("#manNumber").val();
+        var womanNumber = $("#womanNumber").val();
+        $("#free-men").html("");
+        $("#free-women").html("");
+        $("#msg-list").html("");
+        $("#match-list").html("");
+        $("#play-code").find("li").css("background-color", "#fff");
+        for(var i=1;i<=manNumber;i++){
+            $("#free-men").append("<li id='freeMan"+i+"'>Man"+i+"</li>");
+        }
+        for(var i=1;i<=womanNumber;i++){
+            $("#free-women").append("<li id='freeWoman"+i+"'>Woman"+i+"</li>");
+        }
+        var manInputStr=""
+        for(var i=1;i<=manNumber;i++){
+            manInputStr+="<label for=\"manInput"+i+"\" class=\"col-sm-4 control-label\">man"+i+"</label>\n" +
+                "         <div class=\"col-sm-8\">\n" +
+                "         <input type=\"text\" class=\"form-control manPreferInput\" id=\"manInput"+i+"\" placeholder=\"prefer\">\n" +
+                "         </div>"
+        }
+        $("#man-preInput-list").html(manInputStr);
+        var womanInputStr=""
+        for(var i=1;i<=womanNumber;i++){
+            womanInputStr+="<label for=\"womanInput"+i+"\" class=\"col-sm-4 control-label\">woman"+i+"</label>\n" +
+                "         <div class=\"col-sm-8\">\n" +
+                "         <input type=\"text\" class=\"form-control womanPreferInput\" id=\"womanInput"+i+"\" placeholder=\"prefer\">\n" +
+                "         </div>"
+        }
+        $("#woman-preInput-list").html(womanInputStr);
+
+        $('#inputModal').modal('toggle')
+    }
+    //Automatically create a preference list
+    function autoCreate(){
+        var manNumber = $("#manNumber").val();
+        var womanNumber = $("#womanNumber").val();
+        $("#free-men").html("");
+        $("#free-women").html("");
+        $("#msg-list").html("");
+        $("#match-list").html("");
+        $("#play-code").find("li").css("background-color", "#fff");
+        for(var i=1;i<=manNumber;i++){
+            $("#free-men").append("<li id='freeMan"+i+"'>Man"+i+"</li>");
+        }
+        for(var i=1;i<=womanNumber;i++){
+            $("#free-women").append("<li id='freeWoman"+i+"'>Woman"+i+"</li>");
+        }
+        ajaxPost("./doCreate", {manNum: manNumber, womanNum: womanNumber}, function (ret) {
+            console.log(ret.data);
+            manStr = ret.data.man;
+            formatManStr();
+            womanStr = ret.data.woman;
+            formatWomanStr();
             $('#createModal').modal('toggle')
         });
+    }
+    function formatWomanStr() {
+        isCreate=true;
+
+        var womanArr = womanStr.split("-");
+        var womanliStrs = "";
+        for (var i in womanArr) {
+            if (i == 0) {
+                $("#all-woman").html(womanArr[0]);
+            } else {
+                if ($.trim(womanArr[i]) != "") {
+                    var preStr="<span id='tarWoman"+i+"'>"+womanArr[i].split("=")[0]+"=</span>";
+                    var preArr=womanArr[i].split("=")[1].split(",");
+                    for(var j in preArr){
+                        if(j==(preArr.length-1)){
+                            preStr+="<span class='sk' id='tarWoman"+i+"PreMan"+preArr[j]+"'>"+preArr[j]+"</span>";
+                        }else{
+                            preStr+="<span  class='sk' id='tarWoman"+i+"PreMan"+preArr[j]+"'>"+preArr[j]+"</span>,";
+                        }
+                    }
+                    womanliStrs += "<li><p>" +preStr + "<span class='result'></span></p></li>";
+                }
+            }
+        }
+        $("#woman-pre-list").html(womanliStrs);
+    }
+    function formatManStr(){
+        var manArr = manStr.split("-");
+        var manliStrs = "";
+        for (var i in manArr) {
+            if (i == 0) {
+                $("#all-man").html(manArr[0]);
+            } else {
+                if ($.trim(manArr[i]) != "") {
+                    var preStr="<span id='tarMan"+i+"'>"+manArr[i].split("=")[0]+"=</span>";
+                    var preArr=manArr[i].split("=")[1].split(",");
+                    for(var j in preArr){
+                        if(j==(preArr.length-1)){
+                            preStr+="<span  class='sk' id='tarMan"+i+"PreWoman"+preArr[j]+"'>"+preArr[j]+"</span>";
+                        }else{
+                            preStr+="<span  class='sk' id='tarMan"+i+"PreWoman"+preArr[j]+"'>"+preArr[j]+"</span>,";
+                        }
+                    }
+                    manliStrs += "<li><p>" + preStr + "<span class='result'></span></p></li>";
+                }
+            }
+        }
+        $("#man-pre-list").html(manliStrs);
     }
 </script>
 </body>

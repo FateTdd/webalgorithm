@@ -8,7 +8,7 @@ public class GsApplication {
     public List<Man> allman=null;
     public List<Woman>  allwoman=null;
     public List<String> txtList=new ArrayList<String>();
-//    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
+    //    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
     //Initialize the preference list
     public GsApplication(String manStr,String womanStr){
         String[] manStrArr=manStr.split("-");

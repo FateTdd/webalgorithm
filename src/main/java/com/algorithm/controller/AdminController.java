@@ -1,5 +1,6 @@
 package com.algorithm.controller;
 
+import com.algorithm.utils.FileUtils;
 import com.algorithm.utils.MessageResult;
 import com.algorithm.utils.SendEmail;
 import com.algorithm.utils.Suggest;
@@ -9,9 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -37,10 +41,32 @@ public class AdminController {
      */
     @RequestMapping("/saveSuggest.do")
     @ResponseBody
-    public MessageResult saveSuggest(String suggest) throws GeneralSecurityException {
-            SendEmail.SentEmail(suggest);
+    public MessageResult saveSuggest(String suggest) {
+        FileUtils.saveSuggest(suggest);
         return MessageResult.buildSuccess(true);
     }
+    /**
+     * Save suggestions to a txt file, the file name is timestamp
+     * @param suggest 建议内容
+     * @return
+     */
+    @RequestMapping("/getAllSuggest.do")
+    @ResponseBody
+    public MessageResult getAllSuggest(String suggest) {
+        return MessageResult.buildSuccess( FileUtils.getAllSuggest());
+    }
+    /**
+     *
+     * @param msgStr
+     * @return
+     */
+    @RequestMapping("/saveLog")
+    @ResponseBody
+    public MessageResult saveLog(String msgStr) {
+        return MessageResult.buildSuccess(FileUtils.saveLog(msgStr));
+    }
+
+
 
     /**
      * gs homepage
@@ -94,5 +120,61 @@ public class AdminController {
         retNums.put("man",mansb.toString());
         retNums.put("woman", womansb.toString());
         return  MessageResult.buildSuccess(retNums);
+    }
+
+    /**
+     * download
+     * @param fileName
+     * @param savePath
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value ="/download.do",method = RequestMethod.POST)
+    public String download( String fileName ,String savePath, HttpServletRequest request, HttpServletResponse response){
+        response.setContentType("text/html;charset=utf-8");
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+
+        String downLoadPath = savePath;
+        //	String downLoadPath =filePath.replaceAll("/", "\\\\\\\\");
+        try {
+            long fileLength = new File(downLoadPath).length();
+            response.setContentType("application/x-msdownload;");
+            response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("utf-8"), "ISO8859-1"));
+            response.setHeader("Content-Length", String.valueOf(fileLength));
+            bis = new BufferedInputStream(new FileInputStream(downLoadPath));
+            bos = new BufferedOutputStream(response.getOutputStream());
+            byte[] buff = new byte[2048];
+            int bytesRead;
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null)
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            if (bos != null)
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+        return null;
     }
 }

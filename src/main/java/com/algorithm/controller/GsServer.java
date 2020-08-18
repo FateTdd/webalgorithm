@@ -1,21 +1,26 @@
 package com.algorithm.controller;
 
-import com.algorithm.utils.GsApplication;
-import com.algorithm.utils.Man;
-import com.algorithm.utils.Woman;
+import com.algorithm.utils.*;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Joiner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 @ServerEndpoint("/gsServer")
 @Component
@@ -76,6 +81,15 @@ public class GsServer {
                     }
                 }
                 gsApplication.initAgain();
+                if(CheckUtil.hasBlockMatch(gsApplication.allman)==false){
+                    //No blocking pairs.
+
+                }else{
+                    //There are blocking pairs.
+
+                }
+
+
                 String filePath="D:\\"+System.currentTimeMillis()+".txt";
 
                 try {
@@ -126,6 +140,8 @@ public class GsServer {
             msg.put("msg", man.getName()+">>>"+woman.getName()+","+man.getName()+" and "+woman.getName()+" is engaged " );
             msg.put("man",man.getCode());
             msg.put("woman",woman.getCode());
+            msg.put("colorMan",man.getCode());
+            msg.put("colorWoman",woman.getCode());
             msg.put("codeLine",5);
             sendMessage(msg);
         }else{
@@ -142,6 +158,8 @@ public class GsServer {
             msg.put("man",man.getCode());
             msg.put("woman",woman.getCode());
             msg.put("oldman",preMan.getCode());
+            msg.put("colorMan",man.getCode());
+            msg.put("colorWoman",woman.getCode());
             msg.put("codeLine",9);
             sendMessage(msg);
         }
@@ -156,6 +174,8 @@ public class GsServer {
                 msg.put("code",7);
                 msg.put("msg", man.getName()+">>>"+tempWoman.getName()+","+tempWoman.getName()+" is free" );
                 msg.put("codeLine",4);
+                msg.put("colorMan",man.getCode());
+                msg.put("colorWoman",tempWoman.getCode());
                 Thread.sleep(1200l);
                 sendMessage(msg);
                 match(man,tempWoman);
@@ -167,6 +187,8 @@ public class GsServer {
                 msg.put("code",7);
                 msg.put("msg", man.getName()+">>>"+tempWoman.getName()+","+tempWoman.getName()+" and "+tempWoman.getPartner().getName()+" is engaged " );
                 msg.put("codeLine",6);
+                msg.put("colorMan",man.getCode());
+                msg.put("colorWoman",tempWoman.getCode());
                 Thread.sleep(1200l);
                 sendMessage(msg);
                 int manOrder=0;
