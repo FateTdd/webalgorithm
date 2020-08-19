@@ -47,7 +47,7 @@ public class AdminController {
     }
     /**
      * Save suggestions to a txt file, the file name is timestamp
-     * @param suggest 建议内容
+     * @param suggest
      * @return
      */
     @RequestMapping("/getAllSuggest.do")

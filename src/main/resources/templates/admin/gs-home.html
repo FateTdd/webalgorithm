@@ -275,7 +275,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Create Input Prefer List</h4>
+                <h4 class="modal-title">Create Input Prefer List（Manlist:3,2,1）</h4>
             </div>
             <div class="modal-body">
                 <div class="row" style="padding-left: 6px;padding-right: 6px;">
@@ -339,6 +339,15 @@
 
     //Save the log
     function saveLog() {
+        if (filePath == null) {
+            layer.msg('file is empty', {
+                icon: 1,
+                time: 2000 //2 seconds off (default is 3 seconds if not configured)
+            }, function () {
+
+            });
+            return;
+        }
         var msgArr = $("#msg-list").find("li");
         var msgStr = "";
         for (var i=0;i<msgArr.length;i++) {

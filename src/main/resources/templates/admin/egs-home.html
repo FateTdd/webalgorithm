@@ -1,11 +1,297 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <title>Stable matching and visualization.</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.min.css}" rel="stylesheet">
+    <!--<link href="../../static/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--<link href="../../static/css/materialdesignicons.min.css" rel="stylesheet">-->
+    <!--<link href="../../static/css/style.min.css" rel="stylesheet">-->
+    <style type="text/css">
+        .container {
+            width: 99%;
+        }
+
+        h3 {
+            color: white;
+            text-align: center;
+        }
+
+        h4 {
+            color: black;
+            text-align: center;
+        }
+
+        .col- * {
+            padding: 10px 2px;
+        }
+
+        .content-bg {
+            height: 90vh;
+            background-color: #fff;
+            padding: 10px 2px;
+            border-radius: 5px;
+            overflow: auto;
+            overflow-x: hidden;
+        }
+
+        .code li {
+            font-size: 14px;
+            line-height: 18px;
+        }
+
+        li p {
+            width: 92%;
+            word-wrap: break-word;
+        }
+
+        .msg {
+            width: 96%;
+            word-wrap: break-word;
+            font-size: 22px;
+            line-height: 32px;
+        }
+
+        #man-pre-list li {
+            font-size: 18px;
+            line-height: 22px;
+        }
+
+        #woman-pre-list li {
+            font-size: 18px;
+            line-height: 22px;
+        }
+
+        #msg-list li {
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        .result {
+            color: #65bdf8;
+        }
+        #free-men li{
+            display: inline-block;
+            width: 50%;
+            font-size: 10px;
+            font-weight: bolder;
+            color: #242dbd;
+        }
+        #free-women li{
+            display: inline-block;
+            width: 50%;
+            font-size: 10px;
+            font-weight: bolder;
+            color:#242dbd;
+        }
+        #match-list li{
+            display: inline-block;
+            width: 50%;
+            font-size: 12px;
+            font-weight: bolder;
+            color:#0cbd09;
+        }
+        #match-list{
+            height: 18vh;
+            overflow: auto;
+        }
+        #free-men{
+            height: 16vh;
+            overflow: auto;
+        }
+        #free-women{
+            height: 16vh;
+            overflow: auto;
+        }
+        .sk{
+            display: inline-block;
+        }
+    </style>
 </head>
 <body style="background-image: url(./images/GS.jpg); background-size: cover;">
+<div class="container">
+    <div class="row" style="height: 9vh;padding-top: 10px;">
+        <div class="col-lg-4 col-sm-4"><h3 style="text-align: center;color: white;">EGS Match</h3></div>
+        <div class="col-lg-3 col-sm-3"><h3 id="matchResult"></h3></div>
+        <div class="col-lg-5 col-sm-5" align="center">
+            <button type="button" class="btn btn-info btn-sm" onclick="location.href='./home'"><i class="mdi mdi-home"></i>Home</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="openHelp();"><i class="mdi mdi-help"></i>Help</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="openCreate();"><i class="mdi mdi-account-multiple-plus"></i>Create</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="doMatch();"><i class="mdi mdi-play"></i>Match</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="saveFile();"><i class="mdi mdi-content-save"></i>File</button>
+            <button type="button" class="btn btn-info btn-sm" onclick="saveLog();"><i class="mdi mdi-content-save"></i>Save Log</button>
+        </div>
+        <div class="col-lg-4 col-sm-4">&nbsp;</div>
+    </div>
+    <div class="row" style="height: 91vh;">
+        <div class="col-lg-4 col-sm-4">
+            <div class="content-bg" style="padding-top: 10px;">
+                <div class="row">
+                    <h5 style=" text-align: center;color:#242dbd;font-weight: bolder;">EGS Code Flow</h5>
+                    <ol class="code" id="play-code" style="margin-left: 0px;">
+                        <li>Initialize all men and women to free</li>
+                        <li>while some man m is free do</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;w = ﬁrst woman on m’s list;</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;if w is engaged to m' then </li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set m' to be free;</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp; assign m and w to be engaged;</li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;for each successor m'' of m on w’s list do </li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete m'' from w’s preference list and w from m''’s preference list;</li>
+                        <li>the stable matching consists of all n engagements;</li>
+                    </ol>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-sm-6" >
+                        <h5 style="color:#242dbd;font-weight: bolder;text-align: center">Free Men</h5>
+                        <ul id="free-men">
 
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 col-sm-6" >
+                        <h5 style="color:#242dbd;font-weight: bolder;text-align: center">Free Women</h5>
+                        <ul  id="free-women">
+
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <h5 style="color:#0cbd09;font-weight: bolder;text-align: center">Engaged Match</h5>
+                        <ul  id="match-list">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-3">
+            <div class="content-bg">
+                <h5 style="color:#242dbd;font-weight: bolder;text-align: center;"><span>Men:</span><span id="all-man"></span></h5>
+                <ul id="man-pre-list">
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-3 ">
+            <div class="content-bg">
+                <h5 style="color:#242dbd;font-weight: bolder;text-align: center;"><span>Women:</span><span id="all-woman"></span></h5>
+                <ul id="woman-pre-list">
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-2 col-sm-2">
+            <div class="content-bg" >
+                <h5 style="color:#242dbd;font-weight: bolder;text-align: center;">EGS Match Logs</h5>
+                <ul id="msg-list">
+                </ul>
+            </div>
+        </div>
+
+        <!--<div class="col-lg-8 col-sm-8" align="center">-->
+        <!--<form class="form-inline">-->
+        <!--<div class="form-group">-->
+        <!--<div class="input-group">-->
+        <!--<input type="text" class="form-control big-input" id="exampleInputAmount" placeholder="search content">-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<button type="button" class="btn btn-info">Search</button>-->
+        <!--</form>-->
+        <!--</div>-->
+        <!--<div class="col-lg-2 col-sm-2">&nbsp;</div>-->
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" id="helpModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Help</h4>
+            </div>
+            <div class="modal-body">
+                <p> EGS  HelpHelpHelpHelpHelpHelp</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" id="createModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left: 6px;padding-right: 6px;">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="manNumber" class="col-sm-4 control-label">Man Num:</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="manNumber" placeholder="Man Number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="womanNumber" class="col-sm-4 control-label">Woman Num:</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="womanNumber" placeholder="Woman Number">
+                            </div>
+                        </div>
+                        <div class="form-group" align="center">
+                            <label class="radio-inline">
+                                <input type="radio" name="createWay" checked="true" value="0"> Auto
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="createWay" value="1"> Input
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" onclick="doCreate()">Create</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" id="inputModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Create Input Prefer List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left: 6px;padding-right: 6px;">
+                    <div class="col-sm-6">
+                        <form class="form-horizontal">
+                            <div class="form-group" id="man-preInput-list">
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <form class="form-horizontal">
+                            <div class="form-group" id="woman-preInput-list">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" onclick="doInputCreate()">Create</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 </html>
