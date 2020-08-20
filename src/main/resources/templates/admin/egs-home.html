@@ -293,5 +293,116 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/pagination.js}"></script>
+<script type="text/javascript" th:src="@{/js/base.js}"></script>
+<script type="text/javascript">
+    var manStr = null;
+    var womanStr = null;
+    var filePath = null;
+    var playCodeLis = [];
+
+    // Start algorithm matching
+    function doMatch() {
+        if(isCreate==false){
+            layer.msg('please create', {
+                icon: 5,
+                time: 2000 //2 seconds off (default is 3 seconds if not configured)
+            }, function () {
+
+            });
+            return;
+        }
+        isCreate=false;
+        // layer.msg("")
+        $("#matchResult").text("EGS match start");
+        playCodeLis = $("#play-code").find("li");
+        $(playCodeLis[0]).css("background-color", "#ddd");
+        $("#msg-list").html("");
+        setTimeout(function () {
+            sendMessage(JSON.stringify({code: 1, manStr: manStr, womanStr: womanStr}));
+        }, 1200);
+    }
+
+    //Save the log
+    function saveLog() {
+        if (filePath == null) {
+            layer.msg('file is empty', {
+                icon: 1,
+                time: 2000 //2 seconds off (default is 3 seconds if not configured)
+            }, function () {
+
+            });
+            return;
+        }
+        var msgArr = $("#msg-list").find("li");
+        var msgStr = "";
+        for (var i=0;i<msgArr.length;i++) {
+            msgStr += $(msgArr[i]).text() + "###";
+            console.log(i);
+        }
+        layer.load(0);
+        ajaxPost("./saveLog", {msgStr: msgStr}, function (ret) {
+            // alert(ret.data);
+            var form = $("<form>");
+            form.attr("style", "display:none");
+            form.attr("target", "");
+            form.attr("method", "post");
+            form.attr("action", "./download.do");
+            var input1 = $("<input>");
+            input1.attr("type", "hidden");
+            input1.attr("name", "fileName");
+            input1.attr("value", "GsMatchLogFile.txt");
+            var input2 = $("<input>");
+            input2.attr("type", "hidden");
+            input2.attr("name", "savePath");
+            input2.attr("value", decodeURIComponent(ret.data));
+            $("body").append(form);
+            form.append(input1);
+            form.append(input2);
+            form.submit();
+            form.remove();
+            layer.closeAll("loading");
+        });
+    }
+
+    function saveFile() {
+        if (filePath == null) {
+            layer.msg('file is empty', {
+                icon: 1,
+                time: 2000 //2 seconds off (default is 3 seconds if not configured)
+            }, function () {
+
+            });
+            return;
+        }
+        var form = $("<form>");
+        form.attr("style", "display:none");
+        form.attr("target", "");
+        form.attr("method", "post");
+        form.attr("action", "./download.do");
+        var input1 = $("<input>");
+        input1.attr("type", "hidden");
+        input1.attr("name", "fileName");
+        input1.attr("value", "GsMatchFile.txt");
+        var input2 = $("<input>");
+        input2.attr("type", "hidden");
+        input2.attr("name", "savePath");
+        input2.attr("value", decodeURIComponent(filePath));
+        $("body").append(form);
+        form.append(input1);
+        form.append(input2);
+        form.submit();
+        form.remove();
+    }
+
+    $(function () {
+        openSocket();
+    })
+    var socket;
+</script>
 </body>
 </html>
