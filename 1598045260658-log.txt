@@ -1,0 +1,11 @@
+ find Man1 is free
+Man1>>>Woman2,Woman2 is free
+Man1>>>Woman2,Man1 and Woman2 is engaged 
+ find Man2 is free
+Man2>>>Woman1,Woman1 is free
+Man2>>>Woman1,Man2 and Woman1 is engaged 
+ find Man3 is free
+Man3>>>Woman1,Woman1 and Man2 is engaged 
+Man3>>>Woman1,Man2  beat Man3
+Man3>>>Woman3,Woman3 is free
+Man3>>>Woman3,Man3 and Woman3 is engaged 

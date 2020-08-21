@@ -398,7 +398,135 @@
         form.submit();
         form.remove();
     }
+    $(function () {
+        openSocket();
+    })
+    var socket;
 
+    function openSocket() {
+        if (typeof(WebSocket) == "undefined") {
+            alert("Your browser does not support WebSockets");
+        } else {
+            console.log("Your browser supports WebSocket");
+            var socketUrl = "ws://localhost:8080/match/gsServer";
+            console.log(socketUrl);
+            if (socket != null) {
+                socket.close();
+                socket = null;
+            }
+            socket = new WebSocket(socketUrl);
+            //Open the event
+            socket.onopen = function () {
+                console.log("Websocket is open");
+
+            };
+            //Get message event
+            socket.onmessage = function (msg) {
+                console.log(msg.data);
+                var msgObj = JSON.parse(msg.data);
+                switch (msgObj.code) {
+                    case 2:
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[1]).css("background-color", "#ddd");
+                        setTimeout(function () {
+                            sendMessage(JSON.stringify({code: 3}));
+                        }, 1200);
+                        break;
+                    case 4://found single men
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[3]).css("background-color", "#ddd");
+                        $("#msg-list").append("<li> find " + msgObj.freeMan + " is free</li>");
+                        break;
+                    case 7://Looking for a spouse for a single man
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[2]).css("background-color", "#ddd");
+                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        if(msgObj.colorMan){
+                            var skArr=$("span");
+                            for(var i=0;i<skArr.length;i++){
+                                console.log($(skArr[i]).css("color"));
+                                if($(skArr[i]).css("color")=="#F8EE22"||$(skArr[i]).css("color")=="rgb(248, 238, 34)"){
+                                    $(skArr[i]).css("color","#6886F8")
+                                }
+                            }
+                            $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F8EE22");
+                            $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F8EE22");
+                            $("#tarMan"+msgObj.colorMan).css("color","#F8EE22");
+                            $("#tarWoman"+msgObj.colorWoman).css("color","#F8EE22");
+                        }
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
+                        break;
+                    case 8://Men and free women match well
+                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
+                        // var manPreLis = $("#man-pre-list").find("li");
+                        // $(manPreLis[eval(msgObj.man) - 1]).find("span").text(" engaged with Woman" + msgObj.woman);
+                        // var womanPreLis = $("#woman-pre-list").find("li");
+                        // $(womanPreLis[eval(msgObj.woman) - 1]).find("span").text(" engaged with Man" + msgObj.man);
+                        $("#match-list").append("<li id='matchMan"+msgObj.man+"Woman"+ msgObj.woman+"'>Man" +msgObj.man+" match Woman"+ msgObj.woman + "</li>");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
+                        $("#freeMan"+msgObj.man).remove();
+                        $("#freeWoman"+msgObj.woman).remove();
+                        if(msgObj.colorMan){
+                            $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F85576");
+                            $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F85576");
+                            $("#tarMan"+msgObj.colorMan).css("color","#6886F8");
+                            $("#tarWoman"+msgObj.colorWoman).css("color","#6886F8");
+                        }
+                        break;
+                    case 9://Men and unfree women are successful matches
+                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
+                        // var manPreLis = $("#man-pre-list").find("li");
+                        // $(manPreLis[eval(msgObj.man) - 1]).find("span").text(" engaged with Woman" + msgObj.woman);
+                        // var womanPreLis = $("#woman-pre-list").find("li");
+                        // $(womanPreLis[eval(msgObj.woman) - 1]).find("span").text(" engaged with Man" + msgObj.man);
+                        $("#match-list").append("<li id='matchMan"+msgObj.man+"Woman"+ msgObj.woman+"'>Man" +msgObj.man+" match Woman"+ msgObj.woman + "</li>");
+                        $("#matchMan"+msgObj.oldman+"Woman"+ msgObj.woman).remove();
+                        $("#tarMan"+msgObj.oldman+"PreWoman"+msgObj.colorWoman).css("color","#6886F8");
+                        $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.oldman).css("color","#6886F8");
+                        $("#free-men").append("<li id='freeMan"+msgObj.oldman+"'>Man"+msgObj.oldman+"</li>");
+                        $("#play-code").find("li").css("background-color", "#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
+                        $("#freeMan"+msgObj.man).remove();
+                        $("#freeWoman"+msgObj.woman).remove();
+                        if(msgObj.colorMan){
+                            $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F85576");
+                            $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F85576");
+                            $("#tarMan"+msgObj.colorMan).css("color","#6886F8");
+                            $("#tarWoman"+msgObj.colorWoman).css("color","#6886F8");
+                        }
+                        break;
+                    case 99://End of the match
+                        filePath = msgObj.filePath;
+                        $("#matchResult").text("GS match end");
+                        layer.msg('match success end', {
+                            icon: 1,
+                            time: 2000
+                        }, function () {
+
+                        });
+                        break;
+                }
+            };
+            //Close the event
+            socket.onclose = function () {
+                console.log("Websocket closed");
+            };
+            //An error event has occurred
+            socket.onerror = function () {
+                console.log("There is an error with webSocket");
+            }
+        }
+    }
+
+    function sendMessage(_msg) {
+        if (typeof(WebSocket) == "undefined") {
+            alert("Your browser does not support WebSockets");
+        } else {
+            socket.send(_msg);
+        }
+    }
 
     //Open the create
     function openCreate(){

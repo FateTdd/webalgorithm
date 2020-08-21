@@ -15,8 +15,8 @@ public class EgsApplication {
 //    Man man3=new Man(3);
 //    Man man4=new Man(4);
 //    Woman[] allwoman=new Woman[]{woman1,woman2,woman3,woman4};
-    List<Man> allman=null;
-    List<Woman>  allwoman=null;
+    public List<Man> allman=null;
+    public List<Woman>  allwoman=null;
 //    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
     public List<String> txtList=new ArrayList<String>();
     public  EgsApplication(String manStr,String womanStr){
