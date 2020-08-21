@@ -18,8 +18,101 @@ public class EgsApplication {
     List<Man> allman=null;
     List<Woman>  allwoman=null;
 //    static String filePath="D:\\web\\algorithm\\wmmatch.txt";//File address.
-    List<String> txtList=null;
+    public List<String> txtList=new ArrayList<String>();
+    public  EgsApplication(String manStr,String womanStr){
+        String[] manStrArr=manStr.split("-");
+        String[] womanStrArr=womanStr.split("-");
+        txtList.addAll(Arrays.asList(manStrArr));
+        txtList.addAll(Arrays.asList(womanStrArr));
+        List<Man> manList=new ArrayList<Man>();
+        List<Woman>  womanList=new ArrayList<Woman>();
+
+        if(allman==null){
+            int manSize=Integer.valueOf(StringUtils.trimAllWhitespace(manStrArr[0].replace("manNum=","")));
+            int womanSize=Integer.valueOf(StringUtils.trimAllWhitespace(womanStrArr[0].replace("womanNum=","")));
+            for(int i=1;i<=manSize;i++){
+                manList.add(new Man(i));
+            }
+            for(int i=1;i<=womanSize;i++){
+                womanList.add(new Woman(i));
+            }
+        }else{
+            manList=allman;
+            womanList=allwoman;
+        }
+
+        for(Man man:manList){
+            Woman[] preWoman=new Woman[womanList.size()];
+            String preStr="man"+man.getCode()+"=";
+            for(String txtStr:txtList){
+                if(txtStr.startsWith(preStr)){
+                    preStr=txtStr.replace(preStr,"");
+                    break;
+                }
+            }
+            String[] preWomanCode=preStr.split(",");
+            for(int i=0;i<preWomanCode.length;i++){
+                preWoman[i]=getWomanInList(womanList,preWomanCode[i]);
+            }
+            man.setPreferWoman(preWoman);
+        }
+        for(Woman woman:womanList){
+            Man[] preMan=new Man[manList.size()];
+            String preStr="woman"+woman.getCode()+"=";
+            for(String txtStr:txtList){
+                if(txtStr.startsWith(preStr)){
+                    preStr=txtStr.replace(preStr,"");
+                    break;
+                }
+            }
+            String[] preManCode=preStr.split(",");
+            for(int i=0;i<preManCode.length;i++){
+                preMan[i]=getManInList(manList,preManCode[i]);
+            }
+            woman.setPreferMan(preMan);
+        }
+        allman= manList;
+        allwoman=womanList;
+    }
     //Initialize the preference list
+    public void initAgain(){
+        List<Man> manList=allman;
+        List<Woman> womanList=allwoman;
+        for(Man man:manList){
+            Woman[] preWoman=new Woman[womanList.size()];
+            String preStr="man"+man.getCode()+"=";
+            for(String txtStr:txtList){
+                if(txtStr.startsWith(preStr)){
+                    preStr=txtStr.replace(preStr,"");
+                    break;
+                }
+            }
+            String[] preWomanCode=preStr.split(",");
+            for(int i=0;i<preWomanCode.length;i++){
+                preWoman[i]=getWomanInList(womanList,preWomanCode[i]);
+            }
+            man.setPreferWoman(preWoman);
+        }
+        for(Woman woman:womanList){
+            Man[] preMan=new Man[manList.size()];
+            String preStr="woman"+woman.getCode()+"=";
+            for(String txtStr:txtList){
+                if(txtStr.startsWith(preStr)){
+                    preStr=txtStr.replace(preStr,"");
+                    break;
+                }
+            }
+            String[] preManCode=preStr.split(",");
+            for(int i=0;i<preManCode.length;i++){
+                preMan[i]=getManInList(manList,preManCode[i]);
+            }
+            woman.setPreferMan(preMan);
+        }
+        allman= manList;
+        allwoman=womanList;
+    }
+
+
     public void ReadFile(String str){
         //Obtain the male list and female list from the TXT file.
         txtList=new ArrayList<String>();
@@ -168,29 +261,29 @@ public class EgsApplication {
 
 
     public static void main(String[] args) {
-        ////Enter the TXT file name and read the Settings in the file.
-        Scanner in = new Scanner(System.in);
-        System.out.println("Please enter the file you want to read.");
-        String str = in.nextLine();
-
-
-        EgsApplication egsApplication=new EgsApplication();
-        egsApplication.ReadFile(str);
-        while (true){
-            //Find single men
-            Man freeMan=egsApplication.findFreedomMan();
-            if(freeMan!=null){
-                //Single male found
-                egsApplication.searchPartner(freeMan);
-            }else{
-                System.out.println("END=====================All men have partners");
-                break;
-            }
-        }
-        egsApplication.ReadFile(str);
-        CheckUtil.hasBlockMatch(egsApplication.allman);
-        for(Man man:egsApplication.allman){
-            System.out.println(man.getName()+"===========Marry=========="+man.getPartner().getName());
-        }
-    }
+//        ////Enter the TXT file name and read the Settings in the file.
+//        Scanner in = new Scanner(System.in);
+//        System.out.println("Please enter the file you want to read.");
+//        String str = in.nextLine();
+//
+//
+//        EgsApplication egsApplication=new EgsApplication();
+//        egsApplication.ReadFile(str);
+//        while (true){
+//            //Find single men
+//            Man freeMan=egsApplication.findFreedomMan();
+//            if(freeMan!=null){
+//                //Single male found
+//                egsApplication.searchPartner(freeMan);
+//            }else{
+//                System.out.println("END=====================All men have partners");
+//                break;
+//            }
+//        }
+//        egsApplication.ReadFile(str);
+//        CheckUtil.hasBlockMatch(egsApplication.allman);
+//        for(Man man:egsApplication.allman){
+//            System.out.println(man.getName()+"===========Marry=========="+man.getPartner().getName());
+//        }
+   }
 }
