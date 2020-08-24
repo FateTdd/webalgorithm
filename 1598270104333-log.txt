@@ -1,0 +1,19 @@
+ find Man1 is free
+Man1 prefer ﬁrst woman>>>Woman3
+Man1 engaged with Woman3
+ for each  Woman3 prefer list 
+Delete the Man behind Man1 in the Woman3 prefer list. And delete Woman3 from their prefer list.
+Delete the Man behind Man1 in the Woman3 prefer list. And delete Woman3 from their prefer list.
+ update  Woman3 prefer list 
+ find Man2 is free
+Man2 prefer ﬁrst woman>>>Woman2
+Man2 engaged with Woman2
+ for each  Woman2 prefer list 
+Delete the Man behind Man2 in the Woman2 prefer list. And delete Woman2 from their prefer list.
+Delete the Man behind Man2 in the Woman2 prefer list. And delete Woman2 from their prefer list.
+ update  Woman2 prefer list 
+ find Man3 is free
+Man3 prefer ﬁrst woman>>>Woman1
+Man3 engaged with Woman1
+ for each  Woman1 prefer list 
+ update  Woman1 prefer list 

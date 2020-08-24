@@ -2,8 +2,6 @@ package com.algorithm.controller;
 
 import com.algorithm.utils.FileUtils;
 import com.algorithm.utils.MessageResult;
-import com.algorithm.utils.SendEmail;
-import com.algorithm.utils.Suggest;
 import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.security.GeneralSecurityException;
 import java.util.*;
 
 @Controller

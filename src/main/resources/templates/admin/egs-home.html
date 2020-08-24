@@ -266,7 +266,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Create Input Prefer List</h4>
+                <h4 class="modal-title">Create Input Prefer List（For example n=3, Man1:3,2,1）</h4>
             </div>
             <div class="modal-body">
                 <div class="row" style="padding-left: 6px;padding-right: 6px;">
@@ -300,17 +300,16 @@
 <script type="text/javascript" th:src="@{/js/pagination.js}"></script>
 <script type="text/javascript" th:src="@{/js/base.js}"></script>
 <script type="text/javascript">
-    var manStr = null;
-    var womanStr = null;
-    var filePath = null;
-    var playCodeLis = [];
-
-    // Start algorithm matching
-    function doMatch() {
+    var manStr=null;
+    var womanStr=null;
+    var filePath=null;
+    var playCodeLis=[];
+    //Start algorithm matching
+    function doMatch(){
         if(isCreate==false){
             layer.msg('please create', {
                 icon: 5,
-                time: 2000 //2 seconds off (default is 3 seconds if not configured)
+                time: 2000
             }, function () {
 
             });
@@ -319,25 +318,16 @@
         isCreate=false;
         // layer.msg("")
         $("#matchResult").text("EGS match start");
-        playCodeLis = $("#play-code").find("li");
-        $(playCodeLis[0]).css("background-color", "#ddd");
+        playCodeLis=$("#play-code").find("li");
+        $(playCodeLis[0]).css("background-color","#ddd");
         $("#msg-list").html("");
+
         setTimeout(function () {
-            sendMessage(JSON.stringify({code: 1, manStr: manStr, womanStr: womanStr}));
-        }, 1200);
+            sendMessage(JSON.stringify({code:1,manStr:manStr,womanStr:womanStr}));
+        },1200);
     }
-
-    //Save the log
+    //Save log
     function saveLog() {
-        if (filePath == null) {
-            layer.msg('file is empty', {
-                icon: 1,
-                time: 2000 //2 seconds off (default is 3 seconds if not configured)
-            }, function () {
-
-            });
-            return;
-        }
         var msgArr = $("#msg-list").find("li");
         var msgStr = "";
         for (var i=0;i<msgArr.length;i++) {
@@ -355,7 +345,7 @@
             var input1 = $("<input>");
             input1.attr("type", "hidden");
             input1.attr("name", "fileName");
-            input1.attr("value", "GsMatchLogFile.txt");
+            input1.attr("value", "EgsMatchLogFile.txt");
             var input2 = $("<input>");
             input2.attr("type", "hidden");
             input2.attr("name", "savePath");
@@ -368,30 +358,29 @@
             layer.closeAll("loading");
         });
     }
-
-    function saveFile() {
-        if (filePath == null) {
+    function saveFile(){
+        if(filePath==null){
             layer.msg('file is empty', {
                 icon: 1,
-                time: 2000 //2 seconds off (default is 3 seconds if not configured)
+                time: 2000
             }, function () {
 
             });
             return;
         }
         var form = $("<form>");
-        form.attr("style", "display:none");
-        form.attr("target", "");
-        form.attr("method", "post");
-        form.attr("action", "./download.do");
+        form.attr("style","display:none");
+        form.attr("target","");
+        form.attr("method","post");
+        form.attr("action","./download.do");
         var input1 = $("<input>");
-        input1.attr("type", "hidden");
-        input1.attr("name", "fileName");
-        input1.attr("value", "GsMatchFile.txt");
+        input1.attr("type","hidden");
+        input1.attr("name","fileName");
+        input1.attr("value","EgsMatchFile.txt");
         var input2 = $("<input>");
-        input2.attr("type", "hidden");
-        input2.attr("name", "savePath");
-        input2.attr("value", decodeURIComponent(filePath));
+        input2.attr("type","hidden");
+        input2.attr("name","savePath");
+        input2.attr("value",decodeURIComponent(filePath));
         $("body").append(form);
         form.append(input1);
         form.append(input2);
@@ -402,72 +391,80 @@
         openSocket();
     })
     var socket;
-
     function openSocket() {
-        if (typeof(WebSocket) == "undefined") {
-            alert("Your browser does not support WebSockets");
-        } else {
-            console.log("Your browser supports WebSocket");
-            var socketUrl = "ws://localhost:8080/match/gsServer";
+        if(typeof(WebSocket) == "undefined") {
+            alert("Your browser does not support WebSocket.");
+        }else{
+            console.log("Your browser supports WebSocket.");
+            var socketUrl="ws://localhost:8080/match/egsServer";
             console.log(socketUrl);
-            if (socket != null) {
+            if(socket!=null){
                 socket.close();
-                socket = null;
+                socket=null;
             }
             socket = new WebSocket(socketUrl);
-            //Open the event
-            socket.onopen = function () {
-                console.log("Websocket is open");
-
+            //Open event
+            socket.onopen = function() {
+                console.log("websocket is open");
             };
-            //Get message event
-            socket.onmessage = function (msg) {
+            //Get news event
+            socket.onmessage = function(msg) {
                 console.log(msg.data);
-                var msgObj = JSON.parse(msg.data);
+                var msgObj=JSON.parse(msg.data);
                 switch (msgObj.code) {
                     case 2:
-                        $("#play-code").find("li").css("background-color", "#fff");
-                        $(playCodeLis[1]).css("background-color", "#ddd");
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[1]).css("background-color","#ddd");
                         setTimeout(function () {
-                            sendMessage(JSON.stringify({code: 3}));
-                        }, 1200);
+                            sendMessage(JSON.stringify({code:3}));
+                        },1200);
                         break;
-                    case 4://found single men
-                        $("#play-code").find("li").css("background-color", "#fff");
-                        $(playCodeLis[3]).css("background-color", "#ddd");
-                        $("#msg-list").append("<li> find " + msgObj.freeMan + " is free</li>");
+                    case 4://Find single men.
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[3]).css("background-color","#ddd");
+                        $("#msg-list").append("<li> find "+msgObj.freeMan+" is free</li>");
                         break;
-                    case 7://Looking for a spouse for a single man
-                        $("#play-code").find("li").css("background-color", "#fff");
-                        $(playCodeLis[2]).css("background-color", "#ddd");
-                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
-                        $("#play-code").find("li").css("background-color", "#fff");
+                    case 7://Looking for a spouse for a single man.
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        $("#play-code").find("li").css("background-color","#fff");
                         if(msgObj.colorMan){
-                            var skArr=$("span");
-                            for(var i=0;i<skArr.length;i++){
-                                console.log($(skArr[i]).css("color"));
-                                if($(skArr[i]).css("color")=="#F8EE22"||$(skArr[i]).css("color")=="rgb(248, 238, 34)"){
-                                    $(skArr[i]).css("color","#6886F8")
-                                }
-                            }
                             $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F8EE22");
                             $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F8EE22");
                             $("#tarMan"+msgObj.colorMan).css("color","#F8EE22");
                             $("#tarWoman"+msgObj.colorWoman).css("color","#F8EE22");
                         }
-                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
                         break;
-                    case 8://Men and free women match well
-                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
-                        // var manPreLis = $("#man-pre-list").find("li");
-                        // $(manPreLis[eval(msgObj.man) - 1]).find("span").text(" engaged with Woman" + msgObj.woman);
-                        // var womanPreLis = $("#woman-pre-list").find("li");
-                        // $(womanPreLis[eval(msgObj.woman) - 1]).find("span").text(" engaged with Man" + msgObj.man);
+                    case 8://set m' to be free;
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        // var manPreLis=$("#man-pre-list").find("li");
+                        // $(manPreLis[eval(msgObj.man)-1]).find("span").text("");
+                        // var womanPreLis=$("#woman-pre-list").find("li");
+                        // $(womanPreLis[eval(msgObj.woman)-1]).find("span").text("");
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                        $("#free-men").append("<li id='freeMan"+msgObj.man+"'>Man"+msgObj.man+"</li>");
+                        $("#matchMan"+msgObj.man+"Woman"+ msgObj.woman).remove();
+                        $("#tarWoman"+msgObj.woman+"PreMan"+msgObj.man).css("color","#4D5259");
+                        $("#tarMan"+msgObj.man+"PreWoman"+msgObj.woman).css("color","#4D5259");
+
+                        break;
+                    case 9://Successfully matched the unfree woman.
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        // var manPreLis=$("#man-pre-list").find("li");
+                        // $(manPreLis[eval(msgObj.man)-1]).find("span").text(" engaged with Woman"+msgObj.woman);
+                        // var womanPreLis=$("#woman-pre-list").find("li");
+                        // $(womanPreLis[eval(msgObj.woman)-1]).find("span").text(" engaged with Man"+msgObj.man);
                         $("#match-list").append("<li id='matchMan"+msgObj.man+"Woman"+ msgObj.woman+"'>Man" +msgObj.man+" match Woman"+ msgObj.woman + "</li>");
-                        $("#play-code").find("li").css("background-color", "#fff");
-                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
-                        $("#freeMan"+msgObj.man).remove();
-                        $("#freeWoman"+msgObj.woman).remove();
+
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                        if($("#freeMan"+msgObj.man)){
+                            $("#freeMan"+msgObj.man).remove();
+                        }
+                        if($("#freeWoman"+msgObj.woman)){
+                            $("#freeWoman"+msgObj.woman).remove();
+                        }
                         if(msgObj.colorMan){
                             $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F85576");
                             $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F85576");
@@ -475,31 +472,53 @@
                             $("#tarWoman"+msgObj.colorWoman).css("color","#6886F8");
                         }
                         break;
-                    case 9://Men and unfree women are successful matches
-                        $("#msg-list").append("<li>" + msgObj.msg + "</li>");
-                        // var manPreLis = $("#man-pre-list").find("li");
-                        // $(manPreLis[eval(msgObj.man) - 1]).find("span").text(" engaged with Woman" + msgObj.woman);
-                        // var womanPreLis = $("#woman-pre-list").find("li");
-                        // $(womanPreLis[eval(msgObj.woman) - 1]).find("span").text(" engaged with Man" + msgObj.man);
-                        $("#match-list").append("<li id='matchMan"+msgObj.man+"Woman"+ msgObj.woman+"'>Man" +msgObj.man+" match Woman"+ msgObj.woman + "</li>");
-                        $("#matchMan"+msgObj.oldman+"Woman"+ msgObj.woman).remove();
-                        $("#tarMan"+msgObj.oldman+"PreWoman"+msgObj.colorWoman).css("color","#6886F8");
-                        $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.oldman).css("color","#6886F8");
-                        $("#free-men").append("<li id='freeMan"+msgObj.oldman+"'>Man"+msgObj.oldman+"</li>");
-                        $("#play-code").find("li").css("background-color", "#fff");
-                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color", "#ddd");
-                        $("#freeMan"+msgObj.man).remove();
-                        $("#freeWoman"+msgObj.woman).remove();
-                        if(msgObj.colorMan){
-                            $("#tarMan"+msgObj.colorMan+"PreWoman"+msgObj.colorWoman).css("color","#F85576");
-                            $("#tarWoman"+msgObj.colorWoman+"PreMan"+msgObj.colorMan).css("color","#F85576");
-                            $("#tarMan"+msgObj.colorMan).css("color","#6886F8");
-                            $("#tarWoman"+msgObj.colorWoman).css("color","#6886F8");
+                    case 10://delete m'' from w’s preference list and w from m''’s preference list;
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        // var manPreLis=$("#man-pre-list").find("li");
+                        // $(manPreLis[eval(msgObj.man)-1]).find("span").text(" engaged with Woman"+msgObj.woman);
+                        var tempColor=$("#tarWoman"+msgObj.woman).css("color");
+
+                        var preStr="<span id='tarWoman"+msgObj.woman+"'  style='color:"+tempColor+"'>"+"woman"+msgObj.woman+"=</span>";
+                        var preArr=msgObj.prelist.split(",");
+                        for(var j in preArr){
+                            if(j==(preArr.length-1)){
+                                tempColor=$("#tarWoman"+msgObj.woman+"PreMan"+preArr[j]).css("color");
+
+                                preStr+="<span class='sk' id='tarWoman"+msgObj.woman+"PreMan"+preArr[j]+"'  style='color:"+tempColor+"'>"+preArr[j]+"</span>";
+                            }else{
+                                tempColor=$("#tarWoman"+msgObj.woman+"PreMan"+preArr[j]).css("color");
+
+                                preStr+="<span  class='sk' id='tarWoman"+msgObj.woman+"PreMan"+preArr[j]+"'  style='color:"+tempColor+"'>"+preArr[j]+"</span>,";
+                            }
                         }
+                        var womanPreLis=$("#woman-pre-list").find("li");
+                        $(womanPreLis[eval(msgObj.woman)-1]).html("<p>" +preStr + "<span class='result'></span></p>");
+
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
                         break;
-                    case 99://End of the match
-                        filePath = msgObj.filePath;
-                        $("#matchResult").text("GS match end");
+                    case 11://delete m'' from w’s preference list and w from m''’s preference list;
+                        $("#msg-list").append("<li>"+msgObj.msg+"</li>");
+                        $("#play-code").find("li").css("background-color","#fff");
+                        $(playCodeLis[eval(msgObj.codeLine)]).css("background-color","#ddd");
+                        var tempColor=$("#tarMan"+msgObj.man).css("color");
+                        var preStr="<span id='tarMan"+msgObj.man+"' style='color:"+tempColor+"'>man"+msgObj.man+"=</span>";
+                        var preArr=msgObj.preferList.split(",");
+                        for(var j in preArr){
+                            if(j==(preArr.length-1)){
+                                tempColor=$("#tarMan"+msgObj.man+"PreWoman"+preArr[j]).css("color");
+                                preStr+="<span  class='sk' id='tarMan"+msgObj.man+"PreWoman"+preArr[j]+"' style='color:"+tempColor+"'>"+preArr[j]+"</span>";
+                            }else{
+                                tempColor=$("#tarMan"+msgObj.man+"PreWoman"+preArr[j]).css("color");
+                                preStr+="<span  class='sk' id='tarMan"+msgObj.man+"PreWoman"+preArr[j]+"' style='color:"+tempColor+"'>"+preArr[j]+"</span>,";
+                            }
+                        }
+                        var manPreLis=$("#man-pre-list").find("li");
+                        $(manPreLis[eval(msgObj.man)-1]).html("<p>" +preStr + "<span class='result'></span></p>");
+                        break;
+                    case 99://Successfully matched the unfree woman.
+                        filePath=msgObj.filePath;
+                        $("#matchResult").text("EGS match end");
                         layer.msg('match success end', {
                             icon: 1,
                             time: 2000
@@ -509,45 +528,43 @@
                         break;
                 }
             };
-            //Close the event
-            socket.onclose = function () {
-                console.log("Websocket closed");
+            //Close event
+            socket.onclose = function() {
+                console.log("websocket is closed");
             };
-            //An error event has occurred
-            socket.onerror = function () {
-                console.log("There is an error with webSocket");
+            //发生了错误事件
+            socket.onerror = function() {
+                console.log("An error event has occurred");
             }
         }
     }
-
     function sendMessage(_msg) {
-        if (typeof(WebSocket) == "undefined") {
-            alert("Your browser does not support WebSockets");
-        } else {
+        if(typeof(WebSocket) == "undefined") {
+            alert("Your browser does not support WebSocket");
+        }else {
             socket.send(_msg);
         }
     }
-
-    //Open the create
+    //Open create
     function openCreate(){
         $('#createModal').modal('toggle')
     }
-    //Open the help
+    //Open help
     function openHelp() {
         $('#helpModal').modal('toggle')
     }
     function doCreate() {
         var createWay=$("input[name='createWay']:checked").val();
         if(createWay==0){
-            //auto
+            //Automatic generated
             autoCreate();
         }else{
-            //input
+            //Manual input
             $('#createModal').modal('toggle')
             inputCreate();
         }
     }
-    //Manually generate the preference list
+    //Generate the preference list manually.
     //manStr ="manNum=4-man1=1,5,3,2,4-man2=2,1,5,3,4-man3=3,1,4,2,5-man4=2,1,3,5,4-"
     function doInputCreate(){
         var manNumber = $("#manNumber").val();
@@ -566,7 +583,7 @@
         formatWomanStr();
         $('#inputModal').modal('toggle')
     }
-    //Manually generate the preference list
+    //Create a preference list manually.
     function inputCreate(){
         var manNumber = $("#manNumber").val();
         var womanNumber = $("#womanNumber").val();
